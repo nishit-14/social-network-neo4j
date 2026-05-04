@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+data/raw/twitter_combined.txt
+data/processed/users.csv
+data/processed/follows.csv
