@@ -68,16 +68,18 @@ NEO4J_PASSWORD=your_password
 NEO4J_DATABASE=neo4j
 ```
 
-If using a local Neo4j database instead of Aura, the default local values are:
+If using a local Neo4j database instead of Aura, the URI and username are often:
 
 ```text
 NEO4J_URI=bolt://localhost:7687
 NEO4J_USERNAME=neo4j
-NEO4J_PASSWORD=password
+NEO4J_PASSWORD=your_local_neo4j_password
 NEO4J_DATABASE=neo4j
 ```
 
-The `.env` file is not included in the repository because it contains database credentials.
+Use the password that was set when the local Neo4j database was created.
+
+The `.env` file is not committed to the repository because it contains database credentials.
 
 ## Running With an Already-Loaded Database
 
@@ -206,6 +208,6 @@ Use imported accounts such as `user12345` with password `pass12345`, replacing `
 
 ## Notes on Local Files
 
-The `.env` file is kept local because it contains database credentials. The `.venv/` folder is also local because it contains installed Python packages that can be recreated with `pip install -r requirements.txt`.
+The `.env` file contains Neo4j connection settings and should be kept local. The `.venv/` folder is also local because it contains installed Python packages that can be recreated with `pip install -r requirements.txt`.
 
 The raw SNAP dataset files are only needed when rebuilding `users.csv` and `follows.csv` from scratch. If the Neo4j database is already loaded, the app can run without the raw dataset files.
