@@ -1,6 +1,6 @@
 # Social Network Neo4j Console App
 
-This project is a basic social networking application for a graph database class. It uses Python for a console interface and Neo4j as the graph database backend. Users are stored as `User` nodes, and directed follow relationships are stored as `FOLLOWS` edges.
+This project is a basic console-based social networking application. It uses Python for the interface and Neo4j as the graph database backend. Users are stored as `User` nodes, and directed follow relationships are stored as `FOLLOWS` edges.
 
 ## Technologies Used
 
@@ -16,7 +16,7 @@ The project uses the public SNAP ego-Twitter dataset:
 
 https://snap.stanford.edu/data/ego-Twitter.html
 
-The full dataset is large, so this project samples the first 20,000 directed edges from `twitter_combined.txt`. Users are then extracted from those sampled edges. This produces thousands of users and tens of thousands of relationships, satisfying the project requirement of at least 1,000 nodes and 5,000 relationships without loading the entire dataset.
+The full dataset is large, so this project samples the first 20,000 directed edges from `twitter_combined.txt`. Users are then extracted from those sampled edges. In the current processed sample, the graph contains 1,102 users and 19,992 follow relationships.
 
 ## Project Structure
 
@@ -30,7 +30,7 @@ social-network-neo4j/
 ├── README.md
 ├── data/
 │   ├── raw/
-│   │   └── twitter_combined.txt
+│   │   └── twitter_combined.txt        # optional, only needed for reprocessing
 │   └── processed/
 │       ├── users.csv
 │       └── follows.csv
@@ -77,11 +77,11 @@ NEO4J_PASSWORD=password
 NEO4J_DATABASE=neo4j
 ```
 
-The `.env` file is not included in the repository or final zip because it contains database credentials.
+The `.env` file is not included in the repository because it contains database credentials.
 
-## Running With an Already-Loaded Shared Database
+## Running With an Already-Loaded Database
 
-If the Neo4j Aura database already contains the project data, you do not need the raw SNAP dataset and you do not need to run the processing or loading scripts.
+If the Neo4j database already contains the project data, you do not need the raw SNAP dataset and you do not need to run the processing or loading scripts.
 
 After creating `.env`, run:
 
@@ -188,7 +188,7 @@ The console menu supports:
 12. Logout
 13. Exit
 
-## Testing the 11 Use Cases
+## Trying the Features
 
 Use imported accounts such as `user12345` with password `pass12345`, replacing `12345` with an actual user ID from `data/processed/users.csv`.
 
@@ -204,45 +204,8 @@ Use imported accounts such as `user12345` with password `pass12345`, replacing `
 10. Search Users: Choose option 10 and search by name or username.
 11. Explore Popular Users: Choose option 11.
 
-## Screenshots for the Report
+## Notes on Local Files
 
-Take one screenshot per use case while running the console app. Good screenshots should show:
+The `.env` file is kept local because it contains database credentials. The `.venv/` folder is also local because it contains installed Python packages that can be recreated with `pip install -r requirements.txt`.
 
-- The selected menu option
-- The user input
-- The resulting output
-- Evidence that the Cypher-backed feature worked
-
-## Packaging
-
-The final submission can be zipped as:
-
-```text
-projects.zip
-├── report.pdf
-└── social-network-neo4j/
-    ├── app.py
-    ├── db.py
-    ├── load_data.py
-    ├── process_dataset.py
-    ├── requirements.txt
-    ├── README.md
-    └── data/
-```
-
-Do not include local credentials or environment folders in the zip:
-
-```text
-.env
-.venv/
-__pycache__/
-```
-
-The raw SNAP files can also be excluded to keep the zip smaller:
-
-```text
-data/raw/twitter_combined.txt
-data/raw/twitter_combined.txt.gz
-```
-
-If the database is already loaded in Neo4j Aura, another person can still run the app without the raw dataset files. They only need the source code, `requirements.txt`, and their own `.env` file containing valid Neo4j connection settings.
+The raw SNAP dataset files are only needed when rebuilding `users.csv` and `follows.csv` from scratch. If the Neo4j database is already loaded, the app can run without the raw dataset files.
