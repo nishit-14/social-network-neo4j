@@ -28,19 +28,22 @@ social-network-neo4j/
 ├── process_dataset.py
 ├── requirements.txt
 ├── README.md
-├── cypher_queries.md
-├── report_notes.md
 ├── data/
 │   ├── raw/
 │   │   └── twitter_combined.txt
 │   └── processed/
 │       ├── users.csv
 │       └── follows.csv
-└── screenshots/
-    └── put_screenshots_here.txt
 ```
 
 ## Setup
+
+Create and activate a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
 Install dependencies:
 
@@ -48,24 +51,49 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Start Neo4j locally. The default connection settings are:
+## Neo4j Setup
+
+This project uses Neo4j as the backend database. The recommended setup is Neo4j Aura, Neo4j's cloud database service.
+
+1. Create or open a Neo4j Aura database instance.
+2. Copy the connection URI, username, password, and database name.
+3. Create a `.env` file in the project root.
+
+Example `.env` file:
+
+```text
+NEO4J_URI=neo4j+s://your-database.databases.neo4j.io
+NEO4J_USERNAME=your_username
+NEO4J_PASSWORD=your_password
+NEO4J_DATABASE=neo4j
+```
+
+If using a local Neo4j database instead of Aura, the default local values are:
 
 ```text
 NEO4J_URI=bolt://localhost:7687
 NEO4J_USERNAME=neo4j
 NEO4J_PASSWORD=password
-```
-
-You can override these with environment variables or by creating a `.env` file:
-
-```text
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USERNAME=neo4j
-NEO4J_PASSWORD=your_password
 NEO4J_DATABASE=neo4j
 ```
 
+The `.env` file is not included in the repository or final zip because it contains database credentials.
+
+## Running With an Already-Loaded Shared Database
+
+If the Neo4j Aura database already contains the project data, you do not need the raw SNAP dataset and you do not need to run the processing or loading scripts.
+
+After creating `.env`, run:
+
+```bash
+python app.py
+```
+
+The app connects directly to Neo4j and uses the data already loaded in the database.
+
 ## Download the Dataset
+
+This section is only needed if you want to rebuild the processed CSV files or load the database from scratch.
 
 1. Visit https://snap.stanford.edu/data/ego-Twitter.html
 2. Download the Twitter combined network file.
@@ -84,6 +112,8 @@ source_user target_user
 This means `source_user` follows `target_user`.
 
 ## Process the Dataset
+
+Only run this step if `data/raw/twitter_combined.txt` is available.
 
 Run:
 
@@ -111,6 +141,8 @@ source,target
 ```
 
 ## Load Data Into Neo4j
+
+Only run this step if you want to load or reload the database from the processed CSV files.
 
 Run:
 
@@ -174,14 +206,12 @@ Use imported accounts such as `user12345` with password `pass12345`, replacing `
 
 ## Screenshots for the Report
 
-Take one screenshot per use case while running the console app. Store the screenshots in the `screenshots/` folder. Good screenshots should show:
+Take one screenshot per use case while running the console app. Good screenshots should show:
 
 - The selected menu option
 - The user input
 - The resulting output
 - Evidence that the Cypher-backed feature worked
-
-The `report_notes.md` file includes placeholders for all 11 screenshots and short explanations.
 
 ## Packaging
 
@@ -197,7 +227,22 @@ projects.zip
     ├── process_dataset.py
     ├── requirements.txt
     ├── README.md
-    ├── cypher_queries.md
-    ├── report_notes.md
     └── data/
 ```
+
+Do not include local credentials or environment folders in the zip:
+
+```text
+.env
+.venv/
+__pycache__/
+```
+
+The raw SNAP files can also be excluded to keep the zip smaller:
+
+```text
+data/raw/twitter_combined.txt
+data/raw/twitter_combined.txt.gz
+```
+
+If the database is already loaded in Neo4j Aura, another person can still run the app without the raw dataset files. They only need the source code, `requirements.txt`, and their own `.env` file containing valid Neo4j connection settings.
